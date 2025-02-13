@@ -1,0 +1,61 @@
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from '@/app.module';
+import { INestApplication, Logger, ValidationPipe, VersioningType } from '@nestjs/common';
+import { CustomConfigService } from '@/config/custom-config.service';
+import { SwaggerService } from '@/swagger/swagger.service';
+
+async function bootstrap() {
+  const logger = new Logger('Bootstrap');
+
+  try {
+    const app: INestApplication<any> = await NestFactory.create(AppModule);
+
+    const confService: CustomConfigService = app.get(CustomConfigService);
+    const port: number = confService.env().port;
+    const versions: string[] = confService.env().apiVersions;
+
+    app
+      .useGlobalPipes(
+        new ValidationPipe({
+          whitelist: true,
+        }),
+      )
+      .enableVersioning({
+        type: VersioningType.URI,
+        defaultVersion: [versions[0]],
+      })
+      .setGlobalPrefix('api')
+      .enableCors({
+        origin: 'http://localhost:4200',
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+        credentials: true,
+        allowedHeaders: 'Content-Type, Accept, access_token, refresh_token',
+        exposedHeaders: 'Content-Type, Accept, access_token, refresh_token',
+      });
+
+    SwaggerService.setup(app);
+
+    await app.listen(port);
+
+    logger.log(
+      `🚀 Application is running on: http://localhost:${port}/api/v${versions[0]}/`,
+    );
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      logger.error(
+        `❌ Failed to start the application: ${error.message}`,
+        error.stack,
+      );
+    } else {
+      logger.error(
+        '❌ Failed to start the application due to an unknown error:',
+        error,
+      );
+    }
+
+    process.exit(1);
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+bootstrap();

@@ -1,0 +1,28 @@
+# Application Configuration
+PORT=3000
+
+# API Versions
+API_VERSIONS=0,1,2,3
+
+DATABASE_TYPE=mysql
+
+
+# Database Configuration
+# MySQL environment variables
+MYSQL=mysql
+MYSQL_HOST=localhost
+MYSQL_PORT=3307
+MYSQL_DB=playground
+MYSQL_USER=user
+MYSQL_PASSWORD=password
+MYSQL_SCHEMA=public
+# Optional:
+MYSQL_SYNC=false
+MYSQL_LOGGING=false
+
+# JWT Configuration
+JWT_ACCESS=access
+JWT_REFRESH=refresh
+JWT_SECRET=secret
+ACCESS_TOKEN_EXPIRATION=36000000     # 10 hours
+REFRESH_TOKEN_EXPIRATION=31557600000 # 1 year
