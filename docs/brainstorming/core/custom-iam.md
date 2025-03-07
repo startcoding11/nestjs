@@ -457,3 +457,320 @@ export default class Audit extends Base {
 - The `Base` entity encapsulates common fields (`id`, `createdAt`, `updatedAt`) and functionality (`idGenerator`).
 - Each entity extends `Base` and implements the `generateId` method to create a **user-facing surrogate key**.
 - This approach ensures **clean and reusable code** while maintaining **flexibility** for future changes.
+
+### **8. The CORE prefix**
+
+If you want the **database table names** to reflect the entity names (e.g., `core_user`, `core_user_profile`), you can achieve this by explicitly specifying the table names in the `@Entity` decorator in TypeORM. This ensures that the table names in the database match your naming conventions.
+
+Here’s how you can update the entities to use the desired table names:
+
+---
+
+### **1. Core Entities**
+
+#### **a. CoreUser Entity**
+
+```typescript
+// core-user.entity.ts
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import Base from './base.entity';
+import CoreRole from './core-role.entity';
+import CoreGroup from './core-group.entity';
+
+@Entity('core_user') // Explicit table name
+export default class CoreUser extends Base {
+  @Column({ unique: true })
+  userId: string; // 5-6 digit surrogate key
+
+  @Column({ unique: true })
+  email: string;
+
+  @Column()
+  passwordHash: string;
+
+  @ManyToOne(() => CoreRole, (role) => role.users)
+  @JoinColumn({ name: 'roleId' })
+  role: CoreRole;
+
+  @ManyToOne(() => CoreGroup, (group) => group.users)
+  @JoinColumn({ name: 'groupId' })
+  group: CoreGroup;
+
+  constructor() {
+    super();
+    this.generateId();
+  }
+
+  protected generateId(): void {
+    this.userId = this.idGenerator();
+  }
+}
+```
+
+#### **b. CoreRole Entity**
+
+```typescript
+// core-role.entity.ts
+import { Entity, Column, OneToMany } from 'typeorm';
+import Base from './base.entity';
+import CoreUser from './core-user.entity';
+
+@Entity('core_role') // Explicit table name
+export default class CoreRole extends Base {
+  @Column({ unique: true })
+  roleId: string; // 5-6 digit surrogate key
+
+  @Column()
+  name: string;
+
+  @Column()
+  description: string;
+
+  @OneToMany(() => CoreUser, (user) => user.role)
+  users: CoreUser[];
+
+  constructor() {
+    super();
+    this.generateId();
+  }
+
+  protected generateId(): void {
+    this.roleId = this.idGenerator();
+  }
+}
+```
+
+#### **c. CoreGroup Entity**
+
+```typescript
+// core-group.entity.ts
+import { Entity, Column, OneToMany } from 'typeorm';
+import Base from './base.entity';
+import CoreUser from './core-user.entity';
+
+@Entity('core_group') // Explicit table name
+export default class CoreGroup extends Base {
+  @Column({ unique: true })
+  groupId: string; // 5-6 digit surrogate key
+
+  @Column()
+  name: string;
+
+  @Column()
+  description: string;
+
+  @OneToMany(() => CoreUser, (user) => user.group)
+  users: CoreUser[];
+
+  constructor() {
+    super();
+    this.generateId();
+  }
+
+  protected generateId(): void {
+    this.groupId = this.idGenerator();
+  }
+}
+```
+
+#### **d. CorePermission Entity**
+
+```typescript
+// core-permission.entity.ts
+import { Entity, Column, ManyToMany, JoinTable } from 'typeorm';
+import Base from './base.entity';
+import CoreRole from './core-role.entity';
+
+@Entity('core_permission') // Explicit table name
+export default class CorePermission extends Base {
+  @Column({ unique: true })
+  permissionId: string; // 5-6 digit surrogate key
+
+  @Column()
+  name: string;
+
+  @Column()
+  description: string;
+
+  @ManyToMany(() => CoreRole, (role) => role.permissions)
+  @JoinTable({
+    name: 'core_role_permission', // Explicit join table name
+    joinColumn: { name: 'roleId' },
+    inverseJoinColumn: { name: 'permissionId' },
+  })
+  roles: CoreRole[];
+
+  constructor() {
+    super();
+    this.generateId();
+  }
+
+  protected generateId(): void {
+    this.permissionId = this.idGenerator();
+  }
+}
+```
+
+#### **e. CoreAudit Entity**
+
+```typescript
+// core-audit.entity.ts
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import Base from './base.entity';
+import CoreUser from './core-user.entity';
+
+@Entity('core_audit') // Explicit table name
+export default class CoreAudit extends Base {
+  @ManyToOne(() => CoreUser, (user) => user.audits)
+  @JoinColumn({ name: 'userId' })
+  user: CoreUser;
+
+  @Column()
+  action: string;
+
+  @Column()
+  details: string;
+
+  @Column()
+  timestamp: Date;
+
+  constructor() {
+    super();
+    this.generateId();
+  }
+
+  protected generateId(): void {
+    // Audit doesn't need a user-facing surrogate key in this example
+  }
+}
+```
+
+---
+
+### **2. Module Entities**
+
+#### **a. UserProfile Entity**
+
+```typescript
+// user-profile.entity.ts
+import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
+import Base from './base.entity';
+import CoreUser from './core-user.entity';
+
+@Entity('core_user_profile') // Explicit table name
+export default class UserProfile extends Base {
+  @Column()
+  firstName: string;
+
+  @Column()
+  lastName: string;
+
+  @Column()
+  phone: string;
+
+  @Column()
+  address: string;
+
+  @OneToOne(() => CoreUser, (user) => user.profile)
+  @JoinColumn({ name: 'userId' })
+  user: CoreUser;
+
+  constructor() {
+    super();
+    this.generateId();
+  }
+
+  protected generateId(): void {
+    // Profile doesn't need a user-facing surrogate key in this example
+  }
+}
+```
+
+---
+
+### **3. Relationships**
+
+1. **CoreUser ↔ UserProfile**:
+
+   - One-to-one relationship.
+   - Each `CoreUser` has one `UserProfile`.
+
+2. **CoreUser ↔ CoreRole**:
+
+   - Many-to-one relationship.
+   - Each `CoreUser` has one `CoreRole`, but a `CoreRole` can belong to multiple `CoreUser`s.
+
+3. **CoreUser ↔ CoreGroup**:
+
+   - Many-to-one relationship.
+   - Each `CoreUser` belongs to one `CoreGroup`, but a `CoreGroup` can have multiple `CoreUser`s.
+
+4. **CoreRole ↔ CorePermission**:
+
+   - Many-to-many relationship.
+   - Each `CoreRole` can have multiple `CorePermission`s, and each `CorePermission` can belong to multiple `CoreRole`s.
+
+5. **CoreAudit ↔ CoreUser**:
+   - Many-to-one relationship.
+   - Each `CoreAudit` entry is associated with one `CoreUser`, but a `CoreUser` can have multiple `CoreAudit` entries.
+
+---
+
+### **4. Database Table Names**
+
+With the `@Entity` decorator explicitly specifying table names, the database tables will be created as follows:
+
+| **Entity**       | **Table Name**         |
+| ---------------- | ---------------------- |
+| `CoreUser`       | `core_user`            |
+| `CoreRole`       | `core_role`            |
+| `CoreGroup`      | `core_group`           |
+| `CorePermission` | `core_permission`      |
+| `CoreAudit`      | `core_audit`           |
+| `UserProfile`    | `core_user_profile`    |
+| **Join Table**   | `core_role_permission` |
+
+---
+
+### **5. Example Usage**
+
+#### **a. Create a CoreUser**
+
+```typescript
+const user = new CoreUser();
+user.email = 'user@example.com';
+user.passwordHash = 'hashed-password';
+user.role = role; // Assign a CoreRole
+user.group = group; // Assign a CoreGroup
+await user.save();
+```
+
+#### **b. Assign CorePermissions to a CoreRole**
+
+```typescript
+const role = new CoreRole();
+role.name = 'Admin';
+role.description = 'Administrator role';
+role.permissions = [permission1, permission2]; // Assign CorePermissions
+await role.save();
+```
+
+#### **c. Log a CoreAudit Entry**
+
+```typescript
+const audit = new CoreAudit();
+audit.user = user; // Associate with a CoreUser
+audit.action = 'login';
+audit.details = 'User logged in successfully';
+audit.timestamp = new Date();
+await audit.save();
+```
+
+---
+
+### **6. Summary**
+
+- Use the `@Entity` decorator to explicitly specify **table names** in the database.
+- Prefix core entities with `core_` (e.g., `core_user`, `core_role`).
+- Use descriptive names for module entities (e.g., `core_user_profile`).
+- This approach ensures **consistency** between your codebase and database schema.
