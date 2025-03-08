@@ -2,6 +2,6 @@ import { Module } from '@nestjs/common';
 import { AuthService } from './auth/auth.service';
 
 @Module({
-  providers: [AuthService]
+  providers: [AuthService],
 })
 export class CoreModule {}
