@@ -2,6 +2,9 @@
 
 NestJS boilerplate
 
+npx nest generate module conf --no-spec
+npx nest generate service conf --no-spec
+
 npx nest generate module api --no-spec
 npx nest generate module api/core --no-spec
 npx nest generate module api/modules --no-spec
