@@ -1,3 +1,3 @@
-import Env from './env.type';
+import { Env, EnvJwt, EnvPostres } from './env.type';
 
-export { Env };
+export { Env, EnvJwt, EnvPostres };

@@ -1,23 +1,27 @@
-type Env = {
+type EnvPostres = {
+  type: string;
+  host: string;
   port: number;
-  postgres: {
-    type: string;
-    host: string;
-    port: number;
-    username: string;
-    password: string;
-    database: string;
-    schema: string;
-    synchronize: boolean;
-    logging: boolean;
-  };
-  jwt: {
-    access: string;
-    refresh: string;
-    secret: string;
-    accessTokenExpiration: number;
-    refreshTokenExpiration: number;
-  };
+  user: string;
+  password: string;
+  database: string;
+  schema: string;
+  synchronize: boolean;
+  logging: boolean;
 };
 
-export default Env;
+type EnvJwt = {
+  access: string;
+  refresh: string;
+  secret: string;
+  accessTokenExpiration: number;
+  refreshTokenExpiration: number;
+};
+
+type Env = {
+  port: number;
+  postgres: EnvPostres;
+  jwt: EnvJwt;
+};
+
+export { Env, EnvJwt, EnvPostres };
