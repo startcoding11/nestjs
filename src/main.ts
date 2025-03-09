@@ -1,7 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfService } from './conf/conf.service';
+import { SwaggerService } from './swagger/swagger.service';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
@@ -11,6 +12,28 @@ async function bootstrap() {
 
     const confService = app.get(ConfService);
     const port = confService.env().port;
+
+    app
+      .useGlobalPipes(
+        new ValidationPipe({
+          whitelist: true,
+        }),
+      )
+      .enableVersioning({
+        type: VersioningType.URI,
+        defaultVersion: ['1'],
+      })
+      .setGlobalPrefix('api');
+
+    app.enableCors({
+      origin: 'http://localhost:4200',
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      credentials: true,
+      allowedHeaders: 'Content-Type, Accept, access_token, refresh_token',
+      exposedHeaders: 'Content-Type, Accept, access_token, refresh_token',
+    });
+
+    SwaggerService.setup(app);
 
     await app.listen(port);
 

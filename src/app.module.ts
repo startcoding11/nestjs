@@ -4,6 +4,7 @@ import { ConfModule } from './conf/conf.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ApiModule } from './api/api.module';
+import { SwaggerModule } from './swagger/swagger.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { ApiModule } from './api/api.module';
     }),
     ConfModule,
     ApiModule,
+    SwaggerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
