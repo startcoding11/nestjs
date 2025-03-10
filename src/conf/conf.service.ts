@@ -1,4 +1,4 @@
-import { Env, EnvJwt, EnvPostres } from '@/shared/types';
+import { Env, EnvJwt, EnvPostgres } from '@/shared/types';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import _ from 'lodash';
@@ -20,17 +20,19 @@ export class ConfService {
 
   private loadEnv(): Env {
     const port = this.getNumberFromEnv('PORT', 'Server port');
+    const apiVersions = this.getRequiredString('API_VERSIONS').split(',');
     const postgres = this.getPostgresEnv();
     const jwt = this.getJwtConfig();
 
     return {
       port,
+      apiVersions,
       postgres,
       jwt,
     };
   }
 
-  private getPostgresEnv(): EnvPostres {
+  private getPostgresEnv(): EnvPostgres {
     return {
       type: this.getRequiredString('POSTGRES', 'Postgres type'),
       host: this.getRequiredString('POSTGRES_HOST', 'Postgres host'),
@@ -63,7 +65,7 @@ export class ConfService {
     };
   }
 
-  private getRequiredString(key: string, description: string): string {
+  private getRequiredString(key: string, description: string = ''): string {
     const value = this.configService.get<string>(key);
     if (_.isNil(value) || _.isEmpty(value)) {
       this.logger.error(

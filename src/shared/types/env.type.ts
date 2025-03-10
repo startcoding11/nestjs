@@ -1,4 +1,4 @@
-type EnvPostres = {
+type EnvPostgres = {
   type: string;
   host: string;
   port: number;
@@ -20,8 +20,9 @@ type EnvJwt = {
 
 type Env = {
   port: number;
-  postgres: EnvPostres;
+  apiVersions: string[];
+  postgres: EnvPostgres;
   jwt: EnvJwt;
 };
 
-export { Env, EnvJwt, EnvPostres };
+export { Env, EnvJwt, EnvPostgres };

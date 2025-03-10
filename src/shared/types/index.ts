@@ -1,3 +1,3 @@
-import { Env, EnvJwt, EnvPostres } from './env.type';
+import { Env, EnvJwt, EnvPostgres } from './env.type';
 
-export { Env, EnvJwt, EnvPostres };
+export { Env, EnvJwt, EnvPostgres };

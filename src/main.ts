@@ -12,6 +12,7 @@ async function bootstrap() {
 
     const confService = app.get(ConfService);
     const port = confService.env().port;
+    const versions = confService.env().apiVersions;
 
     app
       .useGlobalPipes(
@@ -21,7 +22,7 @@ async function bootstrap() {
       )
       .enableVersioning({
         type: VersioningType.URI,
-        defaultVersion: ['1'],
+        defaultVersion: [versions[0]],
       })
       .setGlobalPrefix('api');
 
