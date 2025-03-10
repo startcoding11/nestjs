@@ -1,9 +1,10 @@
+# Application Configuration
 PORT=3000
 
 # API Versions
 API_VERSIONS=0,1,2,3
 
-# POSTGRES configuration
+# Database Configuration
 POSTGRES=postgres
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
@@ -14,9 +15,9 @@ POSTGRES_SCHEMA=public
 POSTGRES_SYNC=true
 POSTGRES_LOGGING=false
 
-#JWT configuration
+# JWT Configuration
 JWT_ACCESS=access
 JWT_REFRESH=refresh
 JWT_SECRET=secret
-ACCESS_TOKEN_EXPIRATION=36000000     #10 hours
-REFRESH_TOKEN_EXPIRATION=31557600000 #1 year
+ACCESS_TOKEN_EXPIRATION=36000000     # 10 hours
+REFRESH_TOKEN_EXPIRATION=31557600000 # 1 year
