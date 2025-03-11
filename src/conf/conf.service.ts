@@ -37,7 +37,7 @@ export class ConfService {
       type: this.getRequiredString('POSTGRES', 'Postgres type'),
       host: this.getRequiredString('POSTGRES_HOST', 'Postgres host'),
       port: this.getNumberFromEnv('POSTGRES_PORT', 'Postgres port'),
-      user: this.getRequiredString('POSTGRES_USER', 'Postgres user'),
+      username: this.getRequiredString('POSTGRES_USER', 'Postgres user'),
       password: this.getRequiredString(
         'POSTGRES_PASSWORD',
         'Postgres password',
