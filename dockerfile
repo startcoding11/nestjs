@@ -39,7 +39,7 @@ COPY --from=builder /usr/src/app/package.json ./package.json
 
 # Add a health check
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
-	CMD curl --retry 3 --fail http://localhost:3000/api/health || exit 1
+	CMD curl --retry 3 --fail http://localhost:3000/api/v0/health || exit 1
 
 # Expose the application port
 EXPOSE 3000
