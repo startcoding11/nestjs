@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ApiModule } from './api/api.module';
 import { SwaggerModule } from './swagger/swagger.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { SwaggerModule } from './swagger/swagger.module';
     ConfModule,
     ApiModule,
     SwaggerModule,
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
