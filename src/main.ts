@@ -24,23 +24,22 @@ async function bootstrap() {
         type: VersioningType.URI,
         defaultVersion: [versions[0]],
       })
-      .setGlobalPrefix('api');
-
-    app.enableCors({
+      .setGlobalPrefix('api')
+      .enableCors({
       origin: 'http://localhost:4200',
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
       credentials: true,
       allowedHeaders: 'Content-Type, Accept, access_token, refresh_token',
       exposedHeaders: 'Content-Type, Accept, access_token, refresh_token',
-    });
+      });
 
     SwaggerService.setup(app);
 
     await app.listen(port);
 
-    logger.log(`Application is running on port ${port}`);
-  } catch (error) {
-    logger.error('Failed to start the application', error);
+    logger.log(`🚀 Application is running on: http://localhost:${port}/api/v${versions[0]}/`);
+  } catch (error: any) {
+    logger.error(`❌ Failed to start the application: ${error.message}`, error.stack);
     process.exit(1);
   }
 }
