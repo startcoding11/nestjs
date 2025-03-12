@@ -4,6 +4,13 @@ PORT=3000
 # API Versions
 API_VERSIONS=0,1,2,3
 
+DATABASE_TYPE=sqlite
+
+#SQLite
+SQLITE_DB=./data/dev.db
+SQLITE_SYNC=true
+SQLITE_LOGGING=true
+
 # Database Configuration
 POSTGRES=postgres
 POSTGRES_HOST=localhost

@@ -18,11 +18,19 @@ type EnvJwt = {
   refreshTokenExpiration: number;
 };
 
+type EnvSqlite = {
+  database: string;
+  synchronize: boolean;
+  logging: boolean;
+};
+
 type Env = {
   port: number;
   apiVersions: string[];
+  databaseType: string;
   postgres: EnvPostgres;
+  sqlite: EnvSqlite;
   jwt: EnvJwt;
 };
 
-export { Env, EnvJwt, EnvPostgres };
+export { Env, EnvJwt, EnvPostgres, EnvSqlite };

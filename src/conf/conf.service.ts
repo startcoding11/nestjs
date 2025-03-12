@@ -1,4 +1,5 @@
 import { Env, EnvJwt, EnvPostgres } from '@/shared/types';
+import { EnvSqlite } from '@/shared/types/env.type';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import _ from 'lodash';
@@ -22,13 +23,25 @@ export class ConfService {
     const port = this.getNumberFromEnv('PORT', 'Server port');
     const apiVersions = this.getRequiredString('API_VERSIONS').split(',');
     const postgres = this.getPostgresEnv();
+    const sqlite = this.getSqliteEnv();
     const jwt = this.getJwtConfig();
+    const databaseType = this.getRequiredString('DATABASE_TYPE');
 
     return {
       port,
       apiVersions,
+      databaseType,
       postgres,
+      sqlite,
       jwt,
+    };
+  }
+
+  private getSqliteEnv(): EnvSqlite {
+    return {
+      database: this.getRequiredString('SQLITE_DB', 'SQLite database path'),
+      synchronize: this.getBooleanFromEnv('SQLITE_SYNC', true),
+      logging: this.getBooleanFromEnv('SQLITE_LOGGING', false),
     };
   }
 

@@ -4,8 +4,11 @@ import { ConfService } from '../conf/conf.service';
 import { Admin } from '@/api/core/admin/entities/admin.entity';
 import { ConfModule } from '@/conf/conf.module';
 
-const entitiesArray = [Admin, 'dist/src/entities/*.entity.{ts,js}'];
-const entitiesArraySQLite = [Admin, 'dist/src/entities/*.entity.{ts,js}'];
+const entitiesArray = [Admin, `dist/src/entities/postgres/*.entity.{ts,js}`];
+const entitiesArraySQLite = [
+  Admin,
+  `dist/src/entities/sqlite/*.entity.{ts,js}`,
+];
 
 const typeOrmPostgresFactory = (
   confService: ConfService,
@@ -20,16 +23,13 @@ const typeOrmPostgresFactory = (
 };
 
 const typeOrmSqliteFactory = (
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   confService: ConfService,
 ): TypeOrmModuleOptions => {
-  // const { sqlite, ...rest } = confService.env().sqlite;
+  const sqlite = confService.env().sqlite;
   return {
     type: 'sqlite',
-    database: 'sqlite.database', // Assuming the config has a 'database' key
     entities: entitiesArraySQLite,
-    synchronize: true,
-    logging: true,
+    ...sqlite,
   };
 };
 
@@ -39,9 +39,7 @@ const typeOrmSqliteFactory = (
     TypeOrmModule.forRootAsync({
       imports: [ConfModule],
       useFactory: (confService: ConfService) => {
-        // Logic to choose which factory to use
-        const dbType = 'postgres'; // confService.env().database.type;
-        return dbType === 'postgres'
+        return confService.env().databaseType === 'postgres'
           ? typeOrmPostgresFactory(confService)
           : typeOrmSqliteFactory(confService);
       },
