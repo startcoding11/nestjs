@@ -26,20 +26,33 @@ async function bootstrap() {
       })
       .setGlobalPrefix('api')
       .enableCors({
-      origin: 'http://localhost:4200',
-      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-      credentials: true,
-      allowedHeaders: 'Content-Type, Accept, access_token, refresh_token',
-      exposedHeaders: 'Content-Type, Accept, access_token, refresh_token',
+        origin: 'http://localhost:4200',
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+        credentials: true,
+        allowedHeaders: 'Content-Type, Accept, access_token, refresh_token',
+        exposedHeaders: 'Content-Type, Accept, access_token, refresh_token',
       });
 
     SwaggerService.setup(app);
 
     await app.listen(port);
 
-    logger.log(`🚀 Application is running on: http://localhost:${port}/api/v${versions[0]}/`);
-  } catch (error: any) {
-    logger.error(`❌ Failed to start the application: ${error.message}`, error.stack);
+    logger.log(
+      `🚀 Application is running on: http://localhost:${port}/api/v${versions[0]}/`,
+    );
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      logger.error(
+        `❌ Failed to start the application: ${error.message}`,
+        error.stack,
+      );
+    } else {
+      logger.error(
+        '❌ Failed to start the application due to an unknown error:',
+        error,
+      );
+    }
+
     process.exit(1);
   }
 }

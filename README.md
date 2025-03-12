@@ -1,3 +1,9 @@
+# nvm
+
+npm list -g --depth=0
+corepack enable
+yarn
+
 # nestjs
 
 NestJS boilerplate
