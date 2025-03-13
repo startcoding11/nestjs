@@ -22,6 +22,7 @@ type EnvSqlite = {
   database: string;
   synchronize: boolean;
   logging: boolean;
+  enableWal: boolean;
 };
 
 type Env = {

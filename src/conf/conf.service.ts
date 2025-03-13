@@ -41,7 +41,8 @@ export class ConfService {
     return {
       database: this.getRequiredString('SQLITE_DB', 'SQLite database path'),
       synchronize: this.getBooleanFromEnv('SQLITE_SYNC', true),
-      logging: this.getBooleanFromEnv('SQLITE_LOGGING', false),
+      logging: this.getBooleanFromEnv('SQLITE_LOGGING', true),
+      enableWal: this.getBooleanFromEnv('SQLITE_ENABLE_WAL', true),
     };
   }
 

@@ -45,4 +45,4 @@ const typeOrmSqliteFactory = (
   ],
   exports: [TypeOrmModule],
 })
-export class DatabaseModule {}
+export class DatabaseModule { }
