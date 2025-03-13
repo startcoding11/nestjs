@@ -1,14 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfService } from '../conf/conf.service';
-import { Admin } from '@/api/core/admin/entities/admin.entity';
 import { ConfModule } from '@/conf/conf.module';
 
-const entitiesArray = [Admin, `dist/src/entities/postgres/*.entity.{ts,js}`];
-const entitiesArraySQLite = [
-  Admin,
-  `dist/src/entities/sqlite/*.entity.{ts,js}`,
-];
+const entities = (dbtype: string) =>
+  `dist/src/entities/${dbtype}/*.entity.{ts,js}`;
 
 const typeOrmPostgresFactory = (
   confService: ConfService,
@@ -18,17 +14,19 @@ const typeOrmPostgresFactory = (
   return {
     type: 'postgres',
     ...postgres,
-    entities: entitiesArray,
+    entities: [entities('postgres')],
   };
 };
 
 const typeOrmSqliteFactory = (
   confService: ConfService,
 ): TypeOrmModuleOptions => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const sqlite = confService.env().sqlite;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
     type: 'sqlite',
-    entities: entitiesArraySQLite,
+    entities: [entities('sqlite')],
     ...sqlite,
   };
 };
