@@ -21,9 +21,7 @@ const typeOrmPostgresFactory = (
 const typeOrmSqliteFactory = (
   confService: ConfService,
 ): TypeOrmModuleOptions => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const sqlite = confService.env().sqlite;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
     type: 'sqlite',
     entities: [entities('sqlite')],
