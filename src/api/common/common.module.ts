@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
-import { V1Module } from './v1/v1.module';
+import { CommonService } from './common.service';
+import { CommonController } from './common.controller';
 
 @Module({
-  imports: [V1Module]
+  controllers: [CommonController],
+  providers: [CommonService],
 })
-export class CommonModule { }
+export class CommonModule {}

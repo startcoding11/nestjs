@@ -1,6 +1,6 @@
 import {
 	CreateDateColumn,
-	PrimaryGeneratedColumn, // cannot generate random values — it strictly increments
+	// PrimaryGeneratedColumn, // cannot generate random values — it strictly increments
 	UpdateDateColumn,
 	DeleteDateColumn,
 	BaseEntity as TypeOrmBaseEntity,
