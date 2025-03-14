@@ -22,6 +22,9 @@ FROM node:alpine
 # Set the working directory
 WORKDIR /usr/src/app
 
+# Install SQLite3
+RUN apk add --no-cache sqlite
+
 # Copy only the necessary files from the builder stage
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/dist ./dist
