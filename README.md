@@ -4,6 +4,48 @@ npm list -g --depth=0
 corepack enable
 yarn
 
+```bash  
+yarn add @nestjs/common @nestjs/config @nestjs/core @nestjs/jwt @nestjs/passport @nestjs/platform-express @nestjs/swagger \
+@nestjs/typeorm class-transformer class-validator jsonwebtoken lodash nanoid passport passport-local mysql pg reflect-metadata \
+rimraf rxjs service sqlite3 typeorm webpack 
+```
+
+```bash
+yarn add -D \
+    @eslint/eslintrc \
+    @eslint/js \
+    @nestjs/cli \
+    @nestjs/schematics \
+    @nestjs/testing \
+    @swc/cli \
+    @swc/core \
+    @types/express \
+    @types/jest \
+    @types/jsonwebtoken \
+    @types/lodash \
+    @types/node \
+    @types/passport-local \
+    @types/mysql \
+    @types/pg \
+    @types/supertest \
+    eslint \
+    eslint-config-prettier \
+    eslint-plugin-prettier \
+    globals \
+    jest \
+    prettier \
+    source-map-support \
+    supertest \
+    ts-jest \
+    ts-loader \
+    ts-node \
+    tsconfig-paths \
+    typescript \
+    typescript-eslint 
+```
+
+
+
 # nestjs
 
 NestJS boilerplate
