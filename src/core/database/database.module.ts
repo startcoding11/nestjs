@@ -3,7 +3,19 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { CustomConfigModule } from '@/config/custom-config.module';
 import { CustomConfigService } from '@/config/custom-config.service';
 import { EnvMySql } from '@/shared/types';
-
+import {
+  CustomerProfileRepositoryImpl, ShopRepositoryImpl, ShopWorkerRepositoryImpl,
+  UserRepositoryImpl,
+  WorkerProfileRepositoryImpl,
+} from '@/core/repositories/mysql';
+import {
+  USER_REPOSITORY,
+  CUSTOMER_PROFILE_REPOSITORY,
+  WORKER_PROFILE_REPOSITORY,
+  SHOP_REPOSITORY,
+  SHOP_WORKER_REPOSITORY,
+} from '@/shared/constants/repositories.constants';
+import { entities } from '@/core/entities/mysql';
 
 const getEntitiesPath = (dbType: string): string[] => {
   return [
@@ -25,6 +37,29 @@ const typeOrmMySqlFactory = (
   };
 };
 
+const _providers = [
+  {
+    provide: USER_REPOSITORY,
+    useClass: UserRepositoryImpl,
+  },
+  {
+    provide: CUSTOMER_PROFILE_REPOSITORY,
+    useClass: CustomerProfileRepositoryImpl,
+  },
+  {
+    provide: WORKER_PROFILE_REPOSITORY,
+    useClass: WorkerProfileRepositoryImpl,
+  },
+  {
+    provide: SHOP_REPOSITORY,
+    useClass: ShopRepositoryImpl,
+  },
+  {
+    provide: SHOP_WORKER_REPOSITORY,
+    useClass: ShopWorkerRepositoryImpl,
+  },
+];
+
 @Module({
   imports: [
     CustomConfigModule,
@@ -35,7 +70,17 @@ const typeOrmMySqlFactory = (
       },
       inject: [CustomConfigService],
     }),
+    TypeOrmModule.forFeature(entities)
   ],
-  exports: [TypeOrmModule],
+  providers: _providers,
+  exports: [
+    TypeOrmModule,
+    USER_REPOSITORY,
+    CUSTOMER_PROFILE_REPOSITORY,
+    WORKER_PROFILE_REPOSITORY,
+    SHOP_REPOSITORY,
+    SHOP_WORKER_REPOSITORY,
+  ],
 })
-export class DatabaseModule {}
+export class DatabaseModule {
+}

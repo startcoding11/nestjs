@@ -5,7 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ApiModule } from './api/api.module';
 import { SwaggerModule } from './swagger/swagger.module';
-import { DatabaseModule } from '@/core/database/database.module';
+import { CoreModule } from '@/core/core.module';
+import { DomainModule } from '@/domain/domain.module';
 
 @Module({
   imports: [
@@ -13,11 +14,13 @@ import { DatabaseModule } from '@/core/database/database.module';
       isGlobal: true,
     }),
     CustomConfigModule,
+    CoreModule,
+    DomainModule,
     ApiModule,
     SwaggerModule,
-    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+}

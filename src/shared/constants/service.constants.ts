@@ -1,0 +1,3 @@
+
+
+export const USER_DOMAIN_SERVICE = 'USER_DOMAIN_SERVICE';

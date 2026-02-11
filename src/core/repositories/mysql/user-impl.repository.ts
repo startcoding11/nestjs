@@ -3,9 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BaseRepository } from './base.repository';
 import { UserEntity } from '@/core/entities/mysql/user.entity';
+import { UserRepository } from '@/domain/user/repositories/user.repository';
+import { UserRole } from '@/shared/enums';
 
 @Injectable()
-export class UserRepository extends BaseRepository<UserEntity> {
+export class UserRepositoryImpl extends BaseRepository<UserEntity> implements UserRepository {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
@@ -40,4 +42,12 @@ export class UserRepository extends BaseRepository<UserEntity> {
     ]);
     return { total, verified };
   }
+
+  async findByRole(role: UserRole): Promise<UserEntity[]> {
+    return this.repository.find({
+      where: { role },
+      order: { createdAt: 'DESC' },
+    });
+  }
 }
+
