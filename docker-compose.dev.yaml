@@ -1,25 +1,30 @@
 version: '3'
 
 services:
-  postgres:
-    image: postgres:alpine
-    container_name: app_postgres
+  mysql:
+    env_file:
+      - .env
+    image: mysql:lts
+    container_name: app_mysql
+    restart: always
     ports:
-      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+      - ${MYSQL_PORT}:${MYSQL_PORT_INTERN}
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    command: --skip-log-bin --innodb-buffer-pool-size=64M
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - mysql-db:/var/lib/mysql
+      - ./scripts/mysql:/scripts:ro
     networks:
       - technical
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    restart: unless-stopped
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 5s
+      timeout: 3s
+      retries: 3
 
   # redis:
   #   image: redis:alpine
@@ -38,7 +43,7 @@ services:
   #   restart: unless-stopped
 
 volumes:
-  postgres_data:
+  database_data:
   # redis_data:
 
 networks:

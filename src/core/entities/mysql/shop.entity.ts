@@ -28,7 +28,6 @@ export class ShopEntity extends BaseEntity {
 
   @Column({ type: 'varchar', length: 255, unique: true })
   @Length(1, 255)
-  @Index({ unique: true })
   slug: string;
 
   @Column({ type: 'text', nullable: true })

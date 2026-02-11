@@ -7,8 +7,7 @@ import { EnvMySql } from '@/shared/types';
 
 const getEntitiesPath = (dbType: string): string[] => {
   return [
-    `dist/src/core/entities/${dbType}/*.entity.js`,
-    `src/core/entities/${dbType}/*.entity.ts`,
+    `dist/src/core/entities/${dbType}/*.entity.*`,
   ];
 };
 

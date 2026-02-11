@@ -26,7 +26,6 @@ import { OrderStatus, PaymentStatus } from '@/shared/enums';
 export class OrderEntity extends BaseEntity {
   @Column({ name: 'order_number', type: 'varchar', length: 50, unique: true })
   @Length(1, 50)
-  @Index({ unique: true })
   orderNumber: string;
 
   @Column('uuid', { name: 'user_id' })

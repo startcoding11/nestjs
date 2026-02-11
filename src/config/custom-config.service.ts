@@ -1,7 +1,7 @@
 import { Env, EnvJwt, EnvMySql } from '@/shared/types';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import _ from 'lodash';
+// Remove lodash import
 
 @Injectable()
 export class CustomConfigService {
@@ -45,7 +45,6 @@ export class CustomConfigService {
         'MySql password',
       ),
       database: this.getRequiredString('MYSQL_DB', 'MySql database'),
-      schema: this.getRequiredString('MYSQL_SCHEMA', 'MySql schema'),
       synchronize: this.getBooleanFromEnv('MYSQL_SYNC', false),
       logging: this.getBooleanFromEnv('MYSQL_LOGGING', false),
     };
@@ -69,7 +68,7 @@ export class CustomConfigService {
 
   private getRequiredString(key: string, description: string = ''): string {
     const value = this.configService.get<string>(key);
-    if (_.isNil(value) || _.isEmpty(value)) {
+    if (value === undefined || value === null || value === '') {
       this.logger.error(
         `Missing or empty environment variable: ${description} (${key})`,
       );
@@ -82,20 +81,38 @@ export class CustomConfigService {
 
   private getNumberFromEnv(key: string, description: string): number {
     const value = this.configService.get<string>(key);
-    const parsedValue = _.isNil(value) ? NaN : parseInt(value, 10);
-    if (_.isNaN(parsedValue)) {
+
+    // FIXED: Check for undefined or null
+    if (value === undefined || value === null) {
       this.logger.error(
-        `Invalid or missing number for environment variable: ${description} (${key})`,
+        `Missing number for environment variable: ${description} (${key})`,
       );
       throw new Error(
-        `Invalid or missing number for environment variable: ${description} (${key})`,
+        `Missing number for environment variable: ${description} (${key})`,
       );
     }
+
+    const parsedValue = parseInt(value, 10);
+
+    if (isNaN(parsedValue)) {
+      this.logger.error(
+        `Invalid number for environment variable: ${description} (${key})`,
+      );
+      throw new Error(
+        `Invalid number for environment variable: ${description} (${key})`,
+      );
+    }
+
     return parsedValue;
   }
 
   private getBooleanFromEnv(key: string, defaultValue: boolean): boolean {
     const value = this.configService.get<string>(key);
-    return _.isNil(value) ? defaultValue : value.toLowerCase() === 'true';
+
+    if (value === undefined || value === null) {
+      return defaultValue;
+    }
+
+    return value.toLowerCase() === 'true';
   }
 }

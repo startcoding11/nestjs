@@ -31,12 +31,10 @@ export class UserEntity extends BaseEntity {
     length: 128,
     unique: true,
   })
-  @Index({ unique: true })
   supertokensUserId: string;
 
   @Column({ type: 'varchar', length: 255, unique: true })
   @IsEmail()
-  @Index({ unique: true })
   email: string;
 
   @Column({ name: 'email_verified', type: 'boolean', default: false })

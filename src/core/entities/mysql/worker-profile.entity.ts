@@ -26,7 +26,6 @@ export class WorkerProfileEntity extends BaseEntity {
   })
   @IsOptional()
   @Length(1, 50)
-  @Index({ unique: true })
   employeeId?: string;
 
   @Column({ name: 'hire_date', type: 'date', nullable: true })

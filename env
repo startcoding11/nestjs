@@ -15,7 +15,6 @@ MYSQL_PORT=3307
 MYSQL_DB=playground
 MYSQL_USER=user
 MYSQL_PASSWORD=password
-MYSQL_SCHEMA=public
 # Optional:
 MYSQL_SYNC=false
 MYSQL_LOGGING=false

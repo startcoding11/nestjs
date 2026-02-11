@@ -17,7 +17,6 @@ type EnvMySql = {
   username: string;
   password: string;
   database: string;
-  schema: string;
   synchronize: boolean;
   logging: boolean;
 };

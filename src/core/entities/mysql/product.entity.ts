@@ -99,7 +99,6 @@ export class ProductEntity extends BaseEntity {
   @Column({ type: 'varchar', length: 100, unique: true, nullable: true })
   @IsOptional()
   @Length(1, 100)
-  @Index({ unique: true })
   sku?: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })

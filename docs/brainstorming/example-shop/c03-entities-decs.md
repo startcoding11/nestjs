@@ -4,14 +4,14 @@
 
 Total Entities: **13**
 
-### Phase 1: User Management & Shops (5 entities)
+###  User Management & Shops (5 entities)
 1. ✅ **User** - Core authentication
 2. ✅ **CustomerProfile** - Customer-specific data
 3. ✅ **WorkerProfile** - Staff data
 4. ✅ **Shop** - Store/shop entity
 5. ✅ **ShopWorker** - Junction table for shop access
 
-### Phase 2: E-commerce Core (8 entities)
+### E-commerce Core (8 entities)
 6. ✅ **Category** - Hierarchical categories
 7. ✅ **Product** - Products with JSON variants
 8. ✅ **ProductImage** - Product photos
