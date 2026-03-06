@@ -1,6 +1,7 @@
-import { Env, EnvJwt, EnvMySql } from '@/shared/types';
+import { Env, EnvAppInfo, EnvJwt, EnvMySql, EnvSuperToken } from '@/shared/types';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+
 // Remove lodash import
 
 @Injectable()
@@ -24,6 +25,8 @@ export class CustomConfigService {
     const mysql: EnvMySql = this.getMySqlEnv();
     const jwt: EnvJwt = this.getJwtConfig();
     const databaseType: string = this.getRequiredString('DATABASE_TYPE');
+    const superToken: EnvSuperToken = this.getSuperTokenEnv();
+    const appInfo: EnvAppInfo = this.getAppInfoEnv();
 
     return {
       port,
@@ -31,6 +34,25 @@ export class CustomConfigService {
       databaseType,
       mysql,
       jwt,
+      superToken,
+      appInfo,
+    };
+  }
+
+  private getAppInfoEnv(): EnvAppInfo {
+    return {
+      appName: 'Online Shop',
+      apiDomain: process.env.API_DOMAIN || 'http://localhost:3000',
+      websiteDomain: process.env.WEBSITE_DOMAIN || 'http://localhost:3001',
+      apiBasePath: '/auth',
+      websiteBasePath: '/auth',
+    };
+  }
+
+  private getSuperTokenEnv(): EnvSuperToken {
+    return {
+      apiKey: this.getRequiredString('SUPERTOKENS_API_KEY'),
+      connectionURI: this.getRequiredString('SUPERTOKENS_CONNECTION_URL'),
     };
   }
 

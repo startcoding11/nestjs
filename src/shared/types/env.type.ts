@@ -36,12 +36,27 @@ type EnvSqlite = {
   enableWal: boolean;
 };
 
+type EnvSuperToken = {
+  connectionURI: string;
+  apiKey: string;
+};
+
+type EnvAppInfo = {
+  appName: string,
+  apiDomain: string,
+  websiteDomain: string,
+  apiBasePath: string,
+  websiteBasePath: string,
+}
+
 type Env = {
   port: number;
   apiVersions: string[];
   databaseType: string;
   mysql: EnvMySql;
   jwt: EnvJwt;
+  superToken: EnvSuperToken,
+  appInfo: EnvAppInfo
 };
 
-export { Env, EnvJwt, EnvMySql };
+export { Env, EnvJwt, EnvMySql, EnvSuperToken, EnvAppInfo };
